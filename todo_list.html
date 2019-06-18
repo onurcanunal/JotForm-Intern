@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>TODO List:</p>
+
+<input type="text" name="textbox" id="myText">
+<button id="myButton" onclick="myFunction()">Add</button>
+
+<ul id="myList">
+</ul>
+
+<script>
+function myFunction() {
+  var edit = 1;
+  var node = document.createElement("LI");
+  var x = document.createElement("INPUT");
+  x.setAttribute("type", "checkbox");
+  node.appendChild(x);
+  var addingText = document.getElementById("myText").value;
+  var textnode = document.createTextNode(addingText);
+  var mySpan = document.createElement("SPAN");
+  mySpan.appendChild(textnode);
+  node.appendChild(mySpan);
+  var removeButton = document.createElement("BUTTON");
+  var buttonText = document.createTextNode("Remove");
+  removeButton.appendChild(buttonText);
+  node.appendChild(removeButton);
+  var editButton = document.createElement("BUTTON");
+  buttonText = document.createTextNode("Edit");
+  editButton.appendChild(buttonText);
+  node.appendChild(editButton);
+  document.getElementById("myList").appendChild(node);
+  removeButton.onclick = function(){
+    document.getElementById("myList").removeChild(node);
+  };
+  editButton.onclick = function(){
+    if(edit === 1){
+      mySpan.contentEditable = "true";
+      edit = 0;
+    }
+    else{
+      mySpan.contentEditable = "false";
+      edit = 1;
+    }
+  };
+  document.getElementById("myText").value = "";
+}
+var input = document.getElementById("myText");
+  input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   document.getElementById("myButton").click();
+  }
+});
+</script>
+
+</body>
+</html>
