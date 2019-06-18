@@ -1,3 +1,3 @@
 # JotForm-Intern
 
-TO-DO list with a Real Time Database.
+TO-DO list with Real Time Database.
