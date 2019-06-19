@@ -1,115 +1,26 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" type="text/css" href="design.css">
 <body>
 
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#config-web-app -->
-     <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
 
-     <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-          apiKey: "AIzaSyDDBnyzYjUsSLWv6NweWQuKSVl8jvDh8z4",
-          authDomain: "todolist-b919a.firebaseapp.com",
-          databaseURL: "https://todolist-b919a.firebaseio.com",
-          projectId: "todolist-b919a",
-          storageBucket: "todolist-b919a.appspot.com",
-          messagingSenderId: "513879670853",
-          appId: "1:513879670853:web:f888873bf163e6d9"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-      </script>
+<script src="firebase_config.js"></script>
 
-<p>TODO List:</p>
+<div class="all">
+  <p><u><b>TODO List</b></u></p>
+  <input type="text" name="textbox" id="myText">
+  <button id="myButton" onclick="myFunction()">Add</button>
+</div>
+<div class="list">
+  <ol id="myList"></ol>
+</div>
 
-<input type="text" name="textbox" id="myText">
-<button id="myButton" onclick="myFunction()">Add</button>
-
-<ul id="myList">
-</ul>
-
-<script>
-var myList = document.getElementById("myList");
-firebase.database().ref('/todos/').on('value', function(snapshot) {
-    while( myList.firstChild ){
-      myList.removeChild( myList.firstChild );
-    }
-    var itemList = snapshot.val();
-    Object.keys(itemList).forEach((item) => {
-      var edit = 1;
-      var node = document.createElement("LI");
-      var myCheckBox = document.createElement("INPUT");
-      myCheckBox.setAttribute("type", "checkbox");
-      if(itemList[item].status == 'waiting'){
-        myCheckBox.checked = false;
-      }
-      else{
-        myCheckBox.checked = true;
-      }
-      node.appendChild(myCheckBox);
-      var textnode = document.createTextNode(itemList[item].desc);
-      var mySpan = document.createElement("SPAN");
-      mySpan.appendChild(textnode);
-      node.appendChild(mySpan);
-      var removeButton = document.createElement("BUTTON");
-      var buttonText = document.createTextNode("Remove");
-      removeButton.appendChild(buttonText);
-      node.appendChild(removeButton);
-      var editButton = document.createElement("BUTTON");
-      buttonText = document.createTextNode("Edit");
-      editButton.appendChild(buttonText);
-      node.appendChild(editButton);
-      myCheckBox.onchange = function(){
-        var updates = {};
-        if(myCheckBox.checked == true){
-          updates['/todos/' + item] = {desc:itemList[item].desc, status: 'done'};
-        }
-        else{
-          updates['/todos/' + item] = {desc:itemList[item].desc, status: 'waiting'};
-        }
-        firebase.database().ref().update(updates);
-      };
-      removeButton.onclick = function(){
-        firebase.database().ref('/todos/' + item).remove();
-      };
-      editButton.onclick = function(){
-        if(edit === 1){
-          mySpan.contentEditable = "true";
-          edit = 0;
-        }
-        else{
-          var updates = {};
-          updates['/todos/' + item] = {desc:mySpan.innerHTML, status: itemList[item].status};
-          firebase.database().ref().update(updates);
-          mySpan.contentEditable = "false";
-          edit = 1;
-        }
-      };
-      myList.appendChild(node);
-    });    
-});
-
-
-function myFunction() {
-  var addingText = document.getElementById("myText").value; 
-  var itemKey = firebase.database().ref().child('todos').push().key;
-  var updates = {};
-  updates['/todos/' + itemKey] = {desc: addingText, status: 'waiting'};
-  firebase.database().ref().update(updates);
-  document.getElementById("myText").value = "";
-}
-
-var input = document.getElementById("myText");
-  input.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-   document.getElementById("myButton").click();
-  }
-});
-</script>
+<script src="todo_list.js"></script>
 
 </body>
 </html>
