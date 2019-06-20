@@ -3,9 +3,9 @@ myText.focus();
 let myList = document.getElementById("myList");
 firebase.database().ref('/todos/').on('value', (snapshot) => {
     while( myList.firstChild ){
-      myList.removeChild( myList.firstChild );
+      myList.removeChild(myList.firstChild);
     }
-    const itemList = snapshot.val();
+    let itemList = snapshot.val();
     Object.keys(itemList).forEach((item) => {
       let edit = 1;
       const node = document.createElement("LI");
@@ -32,47 +32,12 @@ firebase.database().ref('/todos/').on('value', (snapshot) => {
       editButton.appendChild(buttonText);
       editButton.classList.add("editButton");
       node.appendChild(editButton);
-      myCheckBox.onchange = () => {
-        let updates = {};
-        if(myCheckBox.checked == true){
-          updates['/todos/' + item] = {desc:itemList[item].desc, status: 'done'};
-        }
-        else{
-          updates['/todos/' + item] = {desc:itemList[item].desc, status: 'waiting'};
-        }
-        firebase.database().ref().update(updates);
-      }
-      removeButton.onclick = () => {
-        firebase.database().ref('/todos/' + item).remove();
-        myText.focus();
-      }
-      editButton.onclick = () => {
-        if(edit === 1){
-          mySpan.contentEditable = "true";
-          edit = 0;
-          mySpan.focus();
-        }
-        else{
-          let updates = {};
-          updates['/todos/' + item] = {desc:mySpan.innerHTML, status: itemList[item].status};
-          firebase.database().ref().update(updates);
-          mySpan.contentEditable = "false";
-          edit = 1;
-          myText.focus();
-        }
-      }
+      myCheckBox.onchange = checkboxChanged(myCheckBox, item, itemList);
+      removeButton.onclick = removeButtonClicked(item);
+      editButton.onclick = editButtonClicked(item, edit, mySpan, itemList);
       myList.appendChild(node);
     });    
 });
-
-myFunction = () => {
-  const addingText = myText.value; 
-  const itemKey = firebase.database().ref().child('todos').push().key;
-  let updates = {};
-  updates['/todos/' + itemKey] = {desc: addingText, status: 'waiting'};
-  firebase.database().ref().update(updates);
-  myText.value = "";
-}
 myText.addEventListener("keyup", (event) => {
   if (event.keyCode === 13) {
     document.getElementById("myButton").click();
