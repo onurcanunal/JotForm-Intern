@@ -23,3 +23,24 @@ ol {
 #myText {
   width: 300px;
 }
+.removeButton {
+  position: absolute;
+  left: 700px;
+  padding-right:  5px;
+  background-color: white;
+  border-color: red;
+  width: 65px;
+}
+.removeButton:hover {
+  background-color: red;
+}
+.editButton {
+  position: absolute;
+  left: 770px;
+  background-color: white;
+  border-color: blue;
+  width: 65px;
+}
+.editButton:hover {
+  background-color: blue;
+}

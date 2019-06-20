@@ -25,25 +25,12 @@ firebase.database().ref('/todos/').on('value', (snapshot) => {
       let removeButton = document.createElement("BUTTON");
       let buttonText = document.createTextNode("Remove");
       removeButton.appendChild(buttonText);
-      removeButton.style.position = "absolute";
-      removeButton.style.left = "700px";
-      removeButton.style.paddingRight = "5px";
-      removeButton.style.backgroundColor = "white";
-      removeButton.style.borderColor = "red";
-      removeButton.style.width = "65px";
-      removeButton.onmouseover = () => removeButton.style.backgroundColor = "red";
-      removeButton.onmouseout = () => removeButton.style.backgroundColor = "white";
+      removeButton.classList.add("removeButton");
       node.appendChild(removeButton);
       let editButton = document.createElement("BUTTON");
       buttonText = document.createTextNode("Edit");
       editButton.appendChild(buttonText);
-      editButton.style.position = "absolute";
-      editButton.style.left = "770px";
-      editButton.style.backgroundColor = "white";
-      editButton.style.borderColor = "blue";
-      editButton.style.width = "65px";
-      editButton.onmouseover = () => editButton.style.backgroundColor = "blue";
-      editButton.onmouseout = () => editButton.style.backgroundColor = "white";
+      editButton.classList.add("editButton");
       node.appendChild(editButton);
       myCheckBox.onchange = () => {
         let updates = {};
