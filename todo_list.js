@@ -1,15 +1,15 @@
-var myText = document.getElementById("myText");
+let myText = document.getElementById("myText");
 myText.focus();
-var myList = document.getElementById("myList");
-firebase.database().ref('/todos/').on('value', function(snapshot) {
+let myList = document.getElementById("myList");
+firebase.database().ref('/todos/').on('value', (snapshot) => {
     while( myList.firstChild ){
       myList.removeChild( myList.firstChild );
     }
-    var itemList = snapshot.val();
+    const itemList = snapshot.val();
     Object.keys(itemList).forEach((item) => {
-      var edit = 1;
-      var node = document.createElement("LI");
-      var myCheckBox = document.createElement("INPUT");
+      let edit = 1;
+      const node = document.createElement("LI");
+      let myCheckBox = document.createElement("INPUT");
       myCheckBox.setAttribute("type", "checkbox");
       if(itemList[item].status == 'waiting'){
         myCheckBox.checked = false;
@@ -18,12 +18,12 @@ firebase.database().ref('/todos/').on('value', function(snapshot) {
         myCheckBox.checked = true;
       }
       node.appendChild(myCheckBox);
-      var textnode = document.createTextNode(itemList[item].desc);
-      var mySpan = document.createElement("SPAN");
+      const textnode = document.createTextNode(itemList[item].desc);
+      let mySpan = document.createElement("SPAN");
       mySpan.appendChild(textnode);
       node.appendChild(mySpan);
-      var removeButton = document.createElement("BUTTON");
-      var buttonText = document.createTextNode("Remove");
+      let removeButton = document.createElement("BUTTON");
+      let buttonText = document.createTextNode("Remove");
       removeButton.appendChild(buttonText);
       removeButton.style.position = "absolute";
       removeButton.style.left = "700px";
@@ -31,14 +31,10 @@ firebase.database().ref('/todos/').on('value', function(snapshot) {
       removeButton.style.backgroundColor = "white";
       removeButton.style.borderColor = "red";
       removeButton.style.width = "65px";
-      removeButton.onmouseover = function(){
-        removeButton.style.backgroundColor = "red";
-      };
-      removeButton.onmouseout = function(){
-        removeButton.style.backgroundColor = "white";
-      };
+      removeButton.onmouseover = () => removeButton.style.backgroundColor = "red";
+      removeButton.onmouseout = () => removeButton.style.backgroundColor = "white";
       node.appendChild(removeButton);
-      var editButton = document.createElement("BUTTON");
+      let editButton = document.createElement("BUTTON");
       buttonText = document.createTextNode("Edit");
       editButton.appendChild(buttonText);
       editButton.style.position = "absolute";
@@ -46,15 +42,11 @@ firebase.database().ref('/todos/').on('value', function(snapshot) {
       editButton.style.backgroundColor = "white";
       editButton.style.borderColor = "blue";
       editButton.style.width = "65px";
-      editButton.onmouseover = function(){
-        editButton.style.backgroundColor = "blue";
-      };
-      editButton.onmouseout = function(){
-        editButton.style.backgroundColor = "white";
-      };
+      editButton.onmouseover = () => editButton.style.backgroundColor = "blue";
+      editButton.onmouseout = () => editButton.style.backgroundColor = "white";
       node.appendChild(editButton);
-      myCheckBox.onchange = function(){
-        var updates = {};
+      myCheckBox.onchange = () => {
+        let updates = {};
         if(myCheckBox.checked == true){
           updates['/todos/' + item] = {desc:itemList[item].desc, status: 'done'};
         }
@@ -62,43 +54,40 @@ firebase.database().ref('/todos/').on('value', function(snapshot) {
           updates['/todos/' + item] = {desc:itemList[item].desc, status: 'waiting'};
         }
         firebase.database().ref().update(updates);
-      };
-      removeButton.onclick = function(){
+      }
+      removeButton.onclick = () => {
         firebase.database().ref('/todos/' + item).remove();
         myText.focus();
-      };
-      editButton.onclick = function(){
+      }
+      editButton.onclick = () => {
         if(edit === 1){
           mySpan.contentEditable = "true";
           edit = 0;
           mySpan.focus();
         }
         else{
-          var updates = {};
+          let updates = {};
           updates['/todos/' + item] = {desc:mySpan.innerHTML, status: itemList[item].status};
           firebase.database().ref().update(updates);
           mySpan.contentEditable = "false";
           edit = 1;
           myText.focus();
         }
-      };
+      }
       myList.appendChild(node);
     });    
 });
 
-
-function myFunction() {
-  var addingText = document.getElementById("myText").value; 
-  var itemKey = firebase.database().ref().child('todos').push().key;
-  var updates = {};
+myFunction = () => {
+  const addingText = myText.value; 
+  const itemKey = firebase.database().ref().child('todos').push().key;
+  let updates = {};
   updates['/todos/' + itemKey] = {desc: addingText, status: 'waiting'};
   firebase.database().ref().update(updates);
-  document.getElementById("myText").value = "";
+  myText.value = "";
 }
-
-var input = document.getElementById("myText");
-  input.addEventListener("keyup", function(event) {
+myText.addEventListener("keyup", (event) => {
   if (event.keyCode === 13) {
-   document.getElementById("myButton").click();
+    document.getElementById("myButton").click();
   }
 });
