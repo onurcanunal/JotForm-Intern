@@ -1,5 +1,6 @@
 let myText = document.getElementById("myText");
 myText.focus();
+myText.onkeyup = byAlsoPressingEnter;
 let myList = document.getElementById("myList");
 firebase.database().ref('/todos/').on('value', (snapshot) => {
     while( myList.firstChild ){
@@ -11,12 +12,7 @@ firebase.database().ref('/todos/').on('value', (snapshot) => {
       const node = document.createElement("LI");
       let myCheckBox = document.createElement("INPUT");
       myCheckBox.setAttribute("type", "checkbox");
-      if(itemList[item].status == 'waiting'){
-        myCheckBox.checked = false;
-      }
-      else{
-        myCheckBox.checked = true;
-      }
+      myCheckBox.checked = updateCheckboxStatus(item, itemList);
       node.appendChild(myCheckBox);
       const textnode = document.createTextNode(itemList[item].desc);
       let mySpan = document.createElement("SPAN");
@@ -35,11 +31,7 @@ firebase.database().ref('/todos/').on('value', (snapshot) => {
       myCheckBox.onchange = checkboxChanged(myCheckBox, item, itemList);
       removeButton.onclick = removeButtonClicked(item);
       editButton.onclick = editButtonClicked(item, edit, mySpan, itemList);
+      mySpan.onkeyup =  byEscapeNoEdit(mySpan, edit);
       myList.appendChild(node);
     });    
-});
-myText.addEventListener("keyup", (event) => {
-  if (event.keyCode === 13) {
-    document.getElementById("myButton").click();
-  }
 });
